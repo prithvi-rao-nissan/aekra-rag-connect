@@ -21,9 +21,16 @@ def get_embeddings() -> Embeddings:
         from langchain_core.embeddings import DeterministicFakeEmbedding
 
         return DeterministicFakeEmbedding(size=512)
-    from langchain_openai import OpenAIEmbeddings
+    from langchain_openai import AzureOpenAIEmbeddings
 
-    return OpenAIEmbeddings()
+    return AzureOpenAIEmbeddings(
+            deployment=env("AZURE_OPENAI_EMBEDDINGS_MODEL", cast=str, default=undefined),
+            model=env("AZURE_OPENAI_EMBEDDINGS_MODEL", cast=str, default=undefined),
+            azure_endpoint=env("AZURE_OPENAI_EMBEDDINGS_ENDPOINT", cast=str, default=undefined),
+            openai_api_key=env("AZURE_OPENAI_EMBEDDINGS_API_KEY", cast=str, default=undefined),
+            openai_api_type="azure",
+            openai_api_version="2023-05-15",
+        )
 
 
 DEFAULT_EMBEDDINGS = get_embeddings()
